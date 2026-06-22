@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Artifact - RepoMind Space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="navbar-brand mb-4">RepoMind Space</h2>
+            <div class="mb-4" style="padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                <span class="text-muted" style="font-size: 0.75rem; text-transform: uppercase;">Current Workspace</span>
+                <h3 style="font-size: 1.125rem;">E-Commerce API</h3>
+            </div>
+            <nav class="sidebar-nav" style="margin-top: 0;">
+                <a href="workspace-detail.html" class="sidebar-link">Analysis Overview</a>
+                <a href="generate-artifact.html" class="sidebar-link">Generate Artifacts</a>
+                <a href="artifacts.html" class="sidebar-link active">Saved Artifacts</a>
+                <a href="repository-chat.html" class="sidebar-link">Repository Chat</a>
+            </nav>
+            <nav class="sidebar-nav" style="margin-top: auto; padding-top: 2rem;">
+                <a href="dashboard.html" class="sidebar-link">← Back to Dashboard</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="mb-4" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 id="artifactTitle">Project README</h1>
+                    <p class="text-muted">Edit and format your artifact before saving or exporting.</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-secondary">Export PDF</button>
+                    <button class="btn btn-secondary">Export Markdown</button>
+                    <button class="btn btn-primary" onclick="saveArtifact()">Save Changes</button>
+                </div>
+            </header>
+
+            <div class="card" style="height: calc(100vh - 12rem); padding: 0; display: flex; flex-direction: column;">
+                <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); background: var(--bg-dark);">
+                    <!-- Dummy toolbar -->
+                    <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;"><b>B</b></button>
+                    <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;"><i>I</i></button>
+                    <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;"><u>U</u></button>
+                    <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">&lt;/&gt;</button>
+                </div>
+                <textarea class="form-control" style="flex-grow: 1; border: none; border-radius: 0; resize: none; padding: 1.5rem; font-family: monospace; font-size: 1rem;" id="artifactContent" placeholder="Artifact content will load here..."></textarea>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/artifacts.js"></script>
+    <script>
+        function saveArtifact() {
+            alert('Artifact saved successfully!');
+        }
+        
+        // Simulating loading different content based on URL param
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+        if (type) {
+            document.getElementById('artifactTitle').innerText = `Generated ${type}`;
+            document.getElementById('artifactContent').value = `// Auto-generated ${type} content will appear here...`;
+        }
+    </script>
+</body>
+</html>

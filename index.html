@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoMind Space - AI-Powered Repository Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hero {
+            padding: 8rem 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+        .features {
+            padding: 4rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar container">
+        <a href="index.html" class="navbar-brand">RepoMind Space</a>
+        <div class="navbar-nav">
+            <a href="pages/login.html" class="btn btn-secondary">Login</a>
+            <a href="pages/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Understand Repositories in Seconds</h1>
+            <p>Your centralized workspace for AI-powered repository intelligence. Automatically generate documentation, tests, user stories, and chat with your codebase.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="pages/register.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.125rem;">Get Started Free</a>
+                <a href="#features" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.125rem;">Learn More</a>
+            </div>
+        </section>
+
+        <section id="features" class="features grid grid-cols-3">
+            <div class="card text-center">
+                <h3 class="mb-2">Auto-Documentation</h3>
+                <p class="text-muted">Generate comprehensive READMEs and technical docs instantly.</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="mb-2">Smart Generation</h3>
+                <p class="text-muted">Create user stories, test cases, and bug reports from your code.</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="mb-2">Repository Chat</h3>
+                <p class="text-muted">Ask questions about your codebase and get context-aware answers.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

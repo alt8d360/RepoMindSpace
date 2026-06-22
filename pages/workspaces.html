@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspaces - RepoMind Space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="navbar-brand mb-4">RepoMind Space</h2>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">Dashboard</a>
+                <a href="workspaces.html" class="sidebar-link active">Workspaces</a>
+                <a href="#" class="sidebar-link" id="logoutBtn">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="mb-4" style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Your Workspaces</h1>
+                <a href="create-workspace.html" class="btn btn-primary">+ New Workspace</a>
+            </header>
+
+            <div class="grid grid-cols-3" id="workspacesList">
+                <!-- Workspace Cards will be populated here dynamically -->
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/workspace.js"></script>
+</body>
+</html>

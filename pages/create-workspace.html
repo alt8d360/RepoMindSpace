@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Workspace - RepoMind Space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .ingestion-form {
+            max-width: 600px;
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="navbar-brand mb-4">RepoMind Space</h2>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">Dashboard</a>
+                <a href="workspaces.html" class="sidebar-link active">Workspaces</a>
+                <a href="#" class="sidebar-link" id="logoutBtn">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="mb-4">
+                <h1>Create New Workspace</h1>
+                <p class="text-muted">Import a repository to start analyzing and generating intelligence.</p>
+            </header>
+
+            <section class="card ingestion-form">
+                <div class="form-group">
+                    <label class="form-label" for="workspaceName">Workspace Name</label>
+                    <input type="text" id="workspaceName" class="form-control" required placeholder="e.g., My Awesome Project">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="workspaceDesc">Description (Optional)</label>
+                    <input type="text" id="workspaceDesc" class="form-control" placeholder="A brief description of this workspace">
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" id="tabGithub">GitHub URL</button>
+                    <button class="tab-btn" id="tabZip">ZIP Upload</button>
+                </div>
+
+                <form id="ingestForm">
+                    <div id="githubSection" class="form-group">
+                        <label class="form-label" for="repoUrl">GitHub Repository URL</label>
+                        <input type="url" id="repoUrl" class="form-control" placeholder="https://github.com/username/repo">
+                    </div>
+
+                    <div id="zipSection" class="form-group" style="display: none;">
+                        <label class="form-label" for="repoZip">Upload ZIP File</label>
+                        <input type="file" id="repoZip" class="form-control" accept=".zip">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-4" style="width: 100%;">Create & Analyze Repository</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/workspace.js"></script>
+    <script>
+        // Simple tab toggling logic
+        const tabGithub = document.getElementById('tabGithub');
+        const tabZip = document.getElementById('tabZip');
+        const githubSection = document.getElementById('githubSection');
+        const zipSection = document.getElementById('zipSection');
+
+        tabGithub.addEventListener('click', () => {
+            tabGithub.classList.add('active');
+            tabZip.classList.remove('active');
+            githubSection.style.display = 'block';
+            zipSection.style.display = 'none';
+        });
+
+        tabZip.addEventListener('click', () => {
+            tabZip.classList.add('active');
+            tabGithub.classList.remove('active');
+            zipSection.style.display = 'block';
+            githubSection.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
