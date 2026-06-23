@@ -3,6 +3,10 @@
 const API_BASE_URL = 'http://localhost:5000/api/auth';
 const GOOGLE_CLIENT_ID = '1091939061408-1rpl2tqd6tn2iulba1oo8v1cfh94t4bs.apps.googleusercontent.com';
 
+// --- Google Identity Services (GIS) Logic ---
+// Note: handleGoogleResponse is now defined directly in the HTML <head> 
+// to guarantee it exists before Google's script evaluates the data-callback attribute.
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- Traditional Login ---
@@ -64,30 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // --- Google Identity Services (GIS) Logic ---
-    window.handleGoogleResponse = function(response) {
-        console.log("Encoded JWT ID token: " + response.credential);
-        
-        fetch(`${API_BASE_URL}/google`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ credential: response.credential })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                window.location.href = 'dashboard.html';
-            } else {
-                alert(data.error || 'Google login failed');
-            }
-        })
-        .catch(err => {
-            console.error('Error during Google Auth:', err);
-            alert('Failed to connect to authentication server.');
-        });
-    };
 
     // --- Forgot Password / Logout Placeholders ---
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');

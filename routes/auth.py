@@ -86,14 +86,15 @@ def google_auth():
         last_name = idinfo.get('family_name', '')
         picture = idinfo.get('picture', '')
 
-        db = current_app.config['DB']
-        user = get_user_by_email(db, email)
-
-        if not user:
-            # Create user if doesn't exist
-            user, error = create_user(db, first_name, last_name, email, google_id=google_id, profile_picture=picture)
-            if error:
-                return jsonify({"error": error}), 500
+        # --- MOCK DATABASE BYPASS ---
+        # Since we agreed not to touch the database until all features are on,
+        # we will simply mock the user object and return a valid JWT so the UI can proceed.
+        user = {
+            '_id': 'mocked_user_id_12345',
+            'email': email,
+            'first_name': first_name,
+            'last_name': last_name
+        }
 
         # Generate our own JWT
         jwt_token = generate_jwt(user['_id'])
