@@ -78,4 +78,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     loadWorkspaces();
+    loadWorkspacesPage();
+
+    // Logic for workspaces.html specific view
+    function loadWorkspacesPage() {
+        const emptyState = document.getElementById('workspacesEmptyState');
+        const populatedState = document.getElementById('workspacesPopulatedState');
+        if (!emptyState || !populatedState) return;
+
+        const hasWorkspace = localStorage.getItem('hasWorkspace') === 'true';
+        const workspaceName = localStorage.getItem('lastWorkspaceName');
+
+        if (hasWorkspace && workspaceName) {
+            emptyState.style.display = 'none';
+            populatedState.style.display = 'block';
+
+            document.getElementById('statTotalWorkspaces').innerText = '1';
+            document.getElementById('statRepositories').innerText = '1';
+            document.getElementById('statArtifacts').innerText = '0';
+            document.getElementById('statChats').innerText = '0';
+
+            const workspacesList = document.getElementById('workspacesList');
+            workspacesList.innerHTML = `
+                <div class="card glow-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h3 style="margin: 0; font-size: 1.25rem;">${workspaceName}</h3>
+                        <span class="text-muted" style="font-size: 0.75rem;">Active just now</span>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">MongoDB</span>
+                    </div>
+                    <div class="grid grid-cols-3 mb-4" style="gap: 1rem;">
+                        <div>
+                            <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase;">Repos</div>
+                            <div style="font-weight: 600;">1</div>
+                        </div>
+                        <div>
+                            <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase;">Artifacts</div>
+                            <div style="font-weight: 600;">0</div>
+                        </div>
+                        <div>
+                            <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase;">Chats</div>
+                            <div style="font-weight: 600;">0</div>
+                        </div>
+                    </div>
+                    <a href="workspace-detail.html" class="btn btn-secondary text-center" style="width: 100%; display: block;">Open Workspace</a>
+                </div>
+            `;
+
+            const activityLog = document.getElementById('activityLog');
+            activityLog.innerHTML = `
+                <div class="activity-item">
+                    <div class="activity-icon"></div>
+                    <div class="activity-content">
+                        <h4>Workspace Created</h4>
+                        <p>${workspaceName} was initialized.</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="border-color: var(--success);"></div>
+                    <div class="activity-content">
+                        <h4>Analysis Completed</h4>
+                        <p>Repository scan finished successfully.</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            emptyState.style.display = 'block';
+            populatedState.style.display = 'none';
+        }
+    }
 });

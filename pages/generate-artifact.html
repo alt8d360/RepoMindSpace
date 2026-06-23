@@ -31,58 +31,189 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <header class="mb-4">
-                <h1>Generate Artifacts</h1>
-                <p class="text-muted">Use AI to automatically create documentation and testing artifacts based on the repository analysis.</p>
-            </header>
+        <main class="main-content" style="padding: 3rem 4rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <!-- TOP HEADER -->
+                <header style="margin-bottom: 3.5rem;">
+                    <h1 class="analysis-header-title">Generate Artifacts</h1>
+                    <p class="analysis-body-text" style="font-size: 22px;">Create documentation, tests, summaries, and engineering artifacts from your repository analysis using AI.</p>
+                    
+                    <div class="meta-badges" style="margin-top: 1.5rem;">
+                        <div class="meta-badge" style="font-size: 14px; padding: 6px 12px;">
+                            <span style="font-weight: 700; color: #a78bfa; margin-right: 4px;">Repository:</span> <span id="metaRepoName">-</span>
+                        </div>
+                        <div class="meta-badge" style="font-size: 14px; padding: 6px 12px;">
+                            <span style="font-weight: 700; color: #a78bfa; margin-right: 4px;">Analysis:</span> <span style="color: var(--success);" id="metaAnalysisStatus">-</span>
+                        </div>
+                        <div class="meta-badge" style="font-size: 14px; padding: 6px 12px;">
+                            <span style="font-weight: 700; color: #a78bfa; margin-right: 4px;">Files scanned:</span> <span id="metaFilesScanned">-</span>
+                        </div>
+                        <div class="meta-badge" style="font-size: 14px; padding: 6px 12px;">
+                            <span style="font-weight: 700; color: #a78bfa; margin-right: 4px;">Stack:</span> <span id="metaTechStack">-</span>
+                        </div>
+                    </div>
+                </header>
 
-            <div class="grid grid-cols-3">
-                <div class="card" style="display: flex; flex-direction: column;">
-                    <h3 class="mb-2">README</h3>
-                    <p class="text-muted mb-4 flex-grow-1" style="font-size: 0.875rem;">Generate a comprehensive project README including installation, usage, and structure.</p>
-                    <button class="btn btn-primary w-100" onclick="generate('README')">Generate README</button>
-                </div>
-                
-                <div class="card" style="display: flex; flex-direction: column;">
-                    <h3 class="mb-2">Technical Documentation</h3>
-                    <p class="text-muted mb-4 flex-grow-1" style="font-size: 0.875rem;">Create deep architectural, module, and API documentation.</p>
-                    <button class="btn btn-primary w-100" onclick="generate('Documentation')">Generate Docs</button>
+                <div style="display: grid; grid-template-columns: 3fr 1fr; gap: 3rem;">
+                    <!-- LEFT COLUMN (75%) -->
+                    <div>
+                        <!-- RECOMMENDED ARTIFACT -->
+                        <div class="analysis-card" style="background: linear-gradient(145deg, rgba(168, 85, 247, 0.15) 0%, rgba(30, 27, 46, 0.9) 100%); border: 1px solid rgba(168, 85, 247, 0.4); box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15), inset 0 1px 1px rgba(255,255,255,0.1); margin-bottom: 3rem; position: relative; overflow: hidden; padding: 3rem;">
+                            <div style="position: absolute; top: -100px; right: -100px; width: 250px; height: 250px; background: rgba(168, 85, 247, 0.2); filter: blur(60px); border-radius: 50%;"></div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
+                                <div>
+                                    <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
+                                        <span class="tech-pill" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(124, 58, 237, 0.2); color: #c4b5fd; border: 1px solid rgba(124, 58, 237, 0.3);">Beginner Friendly</span>
+                                        <span class="tech-pill" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">High Value</span>
+                                        <span class="tech-pill" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2);">Fast Generation</span>
+                                    </div>
+                                    <h2 style="font-size: 1.125rem; font-weight: 600; color: #a78bfa; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Recommended Next Artifact</h2>
+                                    <h3 style="font-size: 2rem; font-weight: 700; color: white; margin-bottom: 1rem;">README Documentation</h3>
+                                    <p style="color: var(--text-muted); font-size: 1.125rem; margin-bottom: 2rem; max-width: 600px; line-height: 1.6;">
+                                        Generate a complete README with setup instructions, project structure, usage, and feature overview. Best starting point for this repository.
+                                    </p>
+                                    <button class="action-btn-large primary" onclick="generate('README', this)" style="font-size: 1.125rem; padding: 1.25rem 2.5rem; border-radius: 12px; font-weight: 600;">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                        <span>Generate Recommended Artifact</span>
+                                    </button>
+                                </div>
+                                <div style="font-size: 5rem; opacity: 0.9; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));">📘</div>
+                            </div>
+                        </div>
+
+                        <!-- ARTIFACTS SECTION HEADER -->
+                        <div style="margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem; font-weight: 600; color: white;">Available Artifacts</h3>
+                        </div>
+
+                        <!-- ARTIFACT GRID -->
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                            
+                            <!-- 1. README -->
+                            <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.2);" onmouseover="this.style.borderColor='rgba(168, 85, 247, 0.4)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(124, 58, 237, 0.15)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                    <div style="font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">📘</div>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 12px; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">~30 sec</div>
+                                </div>
+                                <h3 style="font-size: 1.375rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">README</h3>
+                                <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Create a complete project README with setup, usage, features, and structure.</p>
+                                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Installation steps</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Usage guide</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Folder structure</li>
+                                </ul>
+                                <button class="action-btn-large primary" onclick="generate('README', this)" style="width: 100%; justify-content: center; font-size: 1.125rem; padding: 1rem; border-radius: 10px;"><span>Generate README</span></button>
+                            </div>
+
+                            <!-- 2. Technical Documentation -->
+                            <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.2);" onmouseover="this.style.borderColor='rgba(168, 85, 247, 0.4)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(124, 58, 237, 0.15)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                    <div style="font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">🧩</div>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 12px; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">~45 sec</div>
+                                </div>
+                                <h3 style="font-size: 1.375rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Technical Documentation</h3>
+                                <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Generate detailed architecture, module, and API documentation.</p>
+                                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Architecture overview</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Module breakdown</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Technical flow</li>
+                                </ul>
+                                <button class="action-btn-large primary" onclick="generate('Documentation', this)" style="width: 100%; justify-content: center; font-size: 1.125rem; padding: 1rem; border-radius: 10px;"><span>Generate Docs</span></button>
+                            </div>
+
+                            <!-- 3. User Stories -->
+                            <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.2);" onmouseover="this.style.borderColor='rgba(168, 85, 247, 0.4)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(124, 58, 237, 0.15)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                    <div style="font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">📝</div>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 12px; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">~40 sec</div>
+                                </div>
+                                <h3 style="font-size: 1.375rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">User Stories</h3>
+                                <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Extract Agile user stories and acceptance criteria from project functionality.</p>
+                                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> User stories</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Acceptance criteria</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Feature mapping</li>
+                                </ul>
+                                <button class="action-btn-large primary" onclick="generate('UserStories', this)" style="width: 100%; justify-content: center; font-size: 1.125rem; padding: 1rem; border-radius: 10px;"><span>Generate Stories</span></button>
+                            </div>
+
+                            <!-- 4. Test Cases -->
+                            <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.2);" onmouseover="this.style.borderColor='rgba(168, 85, 247, 0.4)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(124, 58, 237, 0.15)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                    <div style="font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">🧪</div>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 12px; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">~50 sec</div>
+                                </div>
+                                <h3 style="font-size: 1.375rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Test Cases</h3>
+                                <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Generate functional and unit test scenarios with inputs and expected outputs.</p>
+                                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Test scenarios</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Edge cases</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Expected results</li>
+                                </ul>
+                                <button class="action-btn-large primary" onclick="generate('TestCases', this)" style="width: 100%; justify-content: center; font-size: 1.125rem; padding: 1rem; border-radius: 10px;"><span>Generate Tests</span></button>
+                            </div>
+
+                            <!-- 5. Bug Analysis -->
+                            <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.2);" onmouseover="this.style.borderColor='rgba(168, 85, 247, 0.4)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(124, 58, 237, 0.15)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                    <div style="font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">🐞</div>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 12px; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">~60 sec</div>
+                                </div>
+                                <h3 style="font-size: 1.375rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Bug Analysis</h3>
+                                <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Identify possible risks, code smells, missing validation, and improvement areas.</p>
+                                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Risk report</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Code smells</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Fix suggestions</li>
+                                </ul>
+                                <button class="action-btn-large primary" onclick="generate('BugAnalysis', this)" style="width: 100%; justify-content: center; font-size: 1.125rem; padding: 1rem; border-radius: 10px;"><span>Run Bug Analysis</span></button>
+                            </div>
+
+                            <!-- 6. Commit Summary -->
+                            <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); display: flex; flex-direction: column; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.2);" onmouseover="this.style.borderColor='rgba(168, 85, 247, 0.4)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 12px 30px rgba(124, 58, 237, 0.15)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.2)'">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                    <div style="font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">📊</div>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 12px; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">~30 sec</div>
+                                </div>
+                                <h3 style="font-size: 1.375rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Commit Summary</h3>
+                                <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Summarize git history, progress, and development timeline.</p>
+                                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Timeline</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Progress summary</li>
+                                    <li style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center;"><span style="color: var(--primary-color); margin-right: 10px; font-size: 1.2rem;">•</span> Change highlights</li>
+                                </ul>
+                                <button class="action-btn-large primary" onclick="generate('CommitSummary', this)" style="width: 100%; justify-content: center; font-size: 1.125rem; padding: 1rem; border-radius: 10px;"><span>Generate Summary</span></button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN (25%) -->
+                    <div>
+                        <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); position: sticky; top: 3rem; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                            <h3 style="font-size: 1.25rem; font-weight: 600; color: white; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">Generation Queue</h3>
+                            <div id="queueEmptyState" style="text-align: center; padding: 3rem 0; color: var(--text-muted); font-size: 1rem; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
+                                No artifacts generated yet.
+                            </div>
+                            
+                            <h3 style="font-size: 1.125rem; font-weight: 600; color: white; margin-top: 3rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Recent Outputs</h3>
+                            <div id="recentOutputsEmpty" style="text-align: center; padding: 2rem 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">
+                                Generated artifacts will appear here after creation.
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" style="display: flex; flex-direction: column;">
-                    <h3 class="mb-2">User Stories</h3>
-                    <p class="text-muted mb-4 flex-grow-1" style="font-size: 0.875rem;">Extract Agile user stories and acceptance criteria from codebase functionality.</p>
-                    <button class="btn btn-primary w-100" onclick="generate('UserStories')">Generate Stories</button>
+                <!-- BOTTOM SECTION: SAVED ARTIFACTS -->
+                <div style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; color: white; margin-bottom: 2rem;">Saved Artifacts</h2>
+                    <div style="background: rgba(30, 27, 46, 0.6); backdrop-filter: blur(12px); padding: 4rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                        <div style="color: var(--text-muted); font-size: 1.125rem;">
+                            No saved artifacts yet. Generate your first artifact to see it here.
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" style="display: flex; flex-direction: column;">
-                    <h3 class="mb-2">Test Cases</h3>
-                    <p class="text-muted mb-4 flex-grow-1" style="font-size: 0.875rem;">Generate unit and functional test scenarios with inputs and expected outputs.</p>
-                    <button class="btn btn-primary w-100" onclick="generate('TestCases')">Generate Tests</button>
-                </div>
-
-                <div class="card" style="display: flex; flex-direction: column;">
-                    <h3 class="mb-2">Bug Analysis</h3>
-                    <p class="text-muted mb-4 flex-grow-1" style="font-size: 0.875rem;">Identify security risks, code smells, and missing error handling.</p>
-                    <button class="btn btn-primary w-100" onclick="generate('BugAnalysis')">Run Bug Analysis</button>
-                </div>
-
-                <div class="card" style="display: flex; flex-direction: column;">
-                    <h3 class="mb-2">Commit Summary</h3>
-                    <p class="text-muted mb-4 flex-grow-1" style="font-size: 0.875rem;">Analyze git history to summarize development progress and timelines.</p>
-                    <button class="btn btn-primary w-100" onclick="generate('CommitSummary')">Generate Summary</button>
-                </div>
-            </div>
-
-            <!-- Generation Modal (Hidden by default) -->
-            <div id="generationModal" class="card mt-4" style="display: none; border-color: var(--primary-color);">
-                <h3 class="mb-2" id="modalTitle">Generating...</h3>
-                <p class="text-muted mb-4">Please wait while the AI analyzes the repository and generates your artifact.</p>
-                <!-- Loader Placeholder -->
-                <div style="width: 100%; height: 4px; background: var(--bg-dark); border-radius: 2px; overflow: hidden;">
-                    <div style="width: 50%; height: 100%; background: var(--primary-color);"></div>
-                </div>
             </div>
         </main>
     </div>
@@ -90,14 +221,17 @@
     <script src="../js/analysis.js"></script>
     <script src="../js/generation.js"></script>
     <script>
-        function generate(type) {
-            const modal = document.getElementById('generationModal');
-            document.getElementById('modalTitle').innerText = `Generating ${type}...`;
-            modal.style.display = 'block';
+        function generate(type, btnElement) {
+            // Update UI state on the clicked button
+            const originalText = btnElement.querySelector('span').innerText;
+            btnElement.disabled = true;
+            btnElement.querySelector('span').innerText = 'Generating...';
+            btnElement.style.opacity = '0.7';
+            btnElement.style.cursor = 'not-allowed';
+            btnElement.style.background = 'rgba(124, 58, 237, 0.5)';
             
             // Dummy timeout to simulate generation
             setTimeout(() => {
-                modal.style.display = 'none';
                 window.location.href = `edit-artifact.html?type=${type}`;
             }, 2000);
         }
