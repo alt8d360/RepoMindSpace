@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Google Identity Services (GIS) Logic ---
-    function handleGoogleResponse(response) {
+    window.handleGoogleResponse = function(response) {
         console.log("Encoded JWT ID token: " + response.credential);
         
         fetch(`${API_BASE_URL}/google`, {
@@ -87,39 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error during Google Auth:', err);
             alert('Failed to connect to authentication server.');
         });
-    }
-
-    window.initGoogleAuth = function() {
-        console.log("Google library loaded, initializing...");
-        google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: handleGoogleResponse
-        });
-
-        // Instead of relying on the unreliable One-Tap prompt(), we render the official Google button.
-        const renderOfficialButton = (btnId) => {
-            const btn = document.getElementById(btnId);
-            if (btn) {
-                // Clear the custom SVG and text
-                btn.innerHTML = '';
-                // Render the official Google button directly inside the element
-                google.accounts.id.renderButton(btn, { 
-                    theme: "filled_black", 
-                    size: "large", 
-                    width: btn.offsetWidth || 300,
-                    text: "continue_with"
-                });
-            }
-        };
-
-        renderOfficialButton('googleSignInBtn');
-        renderOfficialButton('googleSignUpBtn');
     };
-
-    // If script loaded synchronously
-    if (typeof google !== 'undefined') {
-        window.initGoogleAuth();
-    }
 
     // --- Forgot Password / Logout Placeholders ---
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
