@@ -84,36 +84,33 @@
             </div>
 
             <!-- Getting Started (Empty State) -->
-            <section id="gettingStartedSection" class="card glass-panel mb-5" style="padding: 2.5rem;">
-                <div class="grid grid-cols-2" style="align-items: center;">
-                    <div>
-                        <h2 class="mb-2">🚀 Welcome to RepoMind Space</h2>
-                        <p class="text-muted mb-4">Analyze repositories, generate documentation, and chat with AI about your codebase. Connect a GitHub repository and let AI analyze your codebase.</p>
-                        <p class="text-muted mb-4" style="font-size: 0.875rem;">
-                            <strong>RepoMind can:</strong><br>
-                            ✓ Understand project structure<br>
-                            ✓ Generate documentation<br>
-                            ✓ Create architecture diagrams<br>
-                            ✓ Answer code questions<br>
-                            ✓ Generate development artifacts
-                        </p>
-                        <div style="display: flex; gap: 1rem;">
-                            <a href="create-workspace.html" class="btn btn-primary">Create Workspace</a>
-                        </div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.05);">
-                        <h3 class="mb-2">Getting Started</h3>
-                        <p class="text-muted mb-2" style="font-size: 0.875rem;">0/4 Completed</p>
-                        <div class="progress-container"><div class="progress-bar"></div></div>
-                        <ul class="checklist mt-4">
-                            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> Create Workspace</li>
-                            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> Connect GitHub Repository / Upload ZIP</li>
-                            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> Run Repository Analysis</li>
-                            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> Generate Artifacts</li>
-                        </ul>
-                    </div>
-                </div>
+            <section id="gettingStartedSection" style="background: rgba(30, 27, 46, 0.4); border: 1px dashed rgba(255,255,255,0.15); border-radius: 16px; padding: 4rem; text-align: center; margin-bottom: 3rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                <h2 style="font-size: 2rem; font-weight: 600; color: white; margin-bottom: 1rem;">Welcome to RepoMind</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.6;">
+                    Create your first workspace to start analyzing repositories, generating documentation, and chatting with your codebase.
+                </p>
+                <a href="create-workspace.html" class="btn btn-primary" style="text-decoration: none; padding: 0.8rem 2rem; font-size: 1rem; border-radius: 8px;">Create Workspace</a>
             </section>
+            
+            <!-- Feature Cards (Empty State) -->
+            <div id="gettingStartedFeatures" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
+                <div style="background: transparent; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease;">
+                    <div style="font-size: 1.5rem; margin-bottom: 1rem;">📁</div>
+                    <h4 style="color: white; font-weight: 500; margin-bottom: 0.5rem; font-size: 1.05rem;">Repository Analysis</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Understand repository structure and technologies.</p>
+                </div>
+                <div style="background: transparent; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease;">
+                    <div style="font-size: 1.5rem; margin-bottom: 1rem;">📄</div>
+                    <h4 style="color: white; font-weight: 500; margin-bottom: 0.5rem; font-size: 1.05rem;">Documentation Generation</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Generate README files, technical docs, and reports.</p>
+                </div>
+                <div style="background: transparent; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease;">
+                    <div style="font-size: 1.5rem; margin-bottom: 1rem;">🤖</div>
+                    <h4 style="color: white; font-weight: 500; margin-bottom: 0.5rem; font-size: 1.05rem;">AI Repository Chat</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Ask questions about architecture, code structure, and implementation.</p>
+                </div>
+            </div>
 
             <!-- Quick Actions -->
             <section class="mb-5">

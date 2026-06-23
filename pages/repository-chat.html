@@ -7,48 +7,234 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        .chat-container {
+        /* Two Column Layout */
+        .chat-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+            height: calc(100vh - 12rem); /* Keep it contained to the viewport */
+        }
+
+        /* Chat Interface */
+        .chat-interface {
+            background: rgba(30, 27, 46, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 12rem);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            background-color: var(--bg-card);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
             overflow: hidden;
+            position: relative;
         }
+
+        /* Empty State */
+        .chat-empty-state {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 5rem;
+            transition: opacity 0.3s ease;
+        }
+        .chat-avatar-large {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.4) 0%, rgba(124, 58, 237, 0.8) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .prompt-chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .prompt-chip:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Chat History */
         .chat-history {
             flex-grow: 1;
-            padding: 1.5rem;
+            padding: 2rem;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
+            z-index: 5; /* Below empty state, until empty state is hidden */
         }
-        .message {
+        
+        .message-row {
+            display: flex;
+            width: 100%;
+        }
+        .message-row.user {
+            justify-content: flex-end;
+        }
+        
+        .message-bubble {
             max-width: 80%;
-            padding: 1rem;
-            border-radius: 0.5rem;
+            padding: 1.25rem;
+            border-radius: 16px;
+            line-height: 1.6;
+            font-size: 1rem;
         }
-        .message.user {
-            align-self: flex-end;
-            background-color: var(--primary-color);
+        .message-row.user .message-bubble {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.9) 0%, rgba(124, 58, 237, 0.9) 100%);
             color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
         }
-        .message.ai {
-            align-self: flex-start;
-            background-color: var(--bg-dark);
-            border: 1px solid var(--border-color);
-        }
-        .chat-input-container {
-            padding: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--bg-card);
+        
+        .message-row.ai .message-wrapper {
             display: flex;
             gap: 1rem;
+            max-width: 85%;
         }
+        .ai-avatar {
+            width: 36px;
+            height: 36px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .message-row.ai .message-bubble {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #e2e8f0;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* Input Area */
+        .chat-input-wrapper {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 20;
+        }
+        
+        .input-glass {
+            display: flex;
+            background: rgba(30, 27, 46, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .input-glass:focus-within {
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+        }
+        
         .chat-input {
             flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 1rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
         }
+        .chat-input:focus {
+            outline: none;
+        }
+        
+        .send-btn {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .send-btn:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .quick-action-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .quick-action-btn:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+
+        /* Context Panel */
+        .context-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+        .context-card {
+            background: rgba(30, 27, 46, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .context-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .context-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        /* Custom scrollbar for chat */
+        .chat-history::-webkit-scrollbar { width: 8px; }
+        .chat-history::-webkit-scrollbar-track { background: transparent; }
+        .chat-history::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .chat-history::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
@@ -75,58 +261,176 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <header class="mb-4">
-                <h1>Repository Chat</h1>
-                <p class="text-muted">Ask questions to understand the architecture, logic, or structure of this repository.</p>
-            </header>
+        <main class="main-content" style="padding: 3rem 4rem;">
+            <div style="max-width: 1400px; margin: 0 auto; height: 100%;">
+                
+                <header style="margin-bottom: 2rem;">
+                    <h1 class="analysis-header-title">Repository Chat</h1>
+                    <p class="analysis-body-text" style="font-size: 1.125rem;">Chat directly with your codebase. Ask about architecture, debug issues, or generate ideas.</p>
+                </header>
 
-            <div class="chat-container">
-                <div class="chat-history" id="chatHistory">
-                    <div class="message ai">
-                        <p>Hello! I am ready to answer questions about the repository. What would you like to know?</p>
+                <div class="chat-grid">
+                    
+                    <!-- LEFT: Chat Interface -->
+                    <div class="chat-interface">
+                        
+                        <!-- Chat History -->
+                        <div class="chat-history" id="chatHistory">
+                            <!-- Empty State -->
+                            <div class="chat-empty-state" id="emptyState" style="align-items: flex-start; justify-content: flex-end; padding-bottom: 2rem; padding-top: 2rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                    <div class="chat-avatar-large" style="margin-bottom: 0; width: 48px; height: 48px; font-size: 1.5rem;">🤖</div>
+                                    <h2 style="font-size: 1.5rem; font-weight: 600; color: white; margin: 0;">RepoMind Assistant</h2>
+                                </div>
+                                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">I can help you understand this repository. Ask me anything or try a suggested prompt:</p>
+                                
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; max-width: 800px;">
+                                    <div class="prompt-chip" onclick="setPrompt(this)">Summarize this repository</div>
+                                    <div class="prompt-chip" onclick="setPrompt(this)">Explain the architecture</div>
+                                    <div class="prompt-chip" onclick="setPrompt(this)">What technologies are used?</div>
+                                    <div class="prompt-chip" onclick="setPrompt(this)">Suggest improvements</div>
+                                </div>
+                            </div>
+                            <!-- Messages injected via JS -->
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="chat-input-wrapper">
+                            <div class="input-glass">
+                                <input type="text" id="chatInput" class="chat-input" placeholder="Ask a question about the repository..." autocomplete="off">
+                                <button class="send-btn" onclick="sendMessage()">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                </button>
+                            </div>
+                            
+                            <div class="quick-actions">
+                                <button class="quick-action-btn" onclick="setPromptAndSend('Summarize Repo')">Summarize Repo</button>
+                                <button class="quick-action-btn" onclick="setPromptAndSend('Explain Architecture')">Explain Architecture</button>
+                                <button class="quick-action-btn" onclick="setPromptAndSend('Analyze Code Quality')">Analyze Code Quality</button>
+                                <button class="quick-action-btn" onclick="setPromptAndSend('Generate README')">Generate README</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Context Panel -->
+                    <div class="context-panel">
+                        
+                        <div class="context-card">
+                            <h3 style="font-size: 1rem; font-weight: 600; color: white; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">Repository Context</h3>
+                            <div class="context-row">
+                                <span style="color: var(--text-muted);">Name</span>
+                                <span style="color: white; font-weight: 500;" id="ctxRepoName">-</span>
+                            </div>
+                            <div class="context-row">
+                                <span style="color: var(--text-muted);">Stack</span>
+                                <span style="color: white;" id="ctxRepoStack">-</span>
+                            </div>
+                            <div class="context-row">
+                                <span style="color: var(--text-muted);">Files</span>
+                                <span style="color: white;" id="ctxRepoFiles">-</span>
+                            </div>
+                            <div class="context-row">
+                                <span style="color: var(--text-muted);">Type</span>
+                                <span style="color: #60a5fa;" id="ctxRepoType">-</span>
+                            </div>
+                            <div class="context-row">
+                                <span style="color: var(--text-muted);">Analysis</span>
+                                <span style="color: var(--success);" id="ctxRepoAnalysis">-</span>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <h3 style="font-size: 1rem; font-weight: 600; color: white; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">Recent Questions</h3>
+                            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <li>
+                                    <a href="#" style="color: #a78bfa; text-decoration: none; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.5rem;" onclick="setPrompt(this); return false;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top: 3px; flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                        What does this project do?
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" style="color: #a78bfa; text-decoration: none; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.5rem;" onclick="setPrompt(this); return false;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top: 3px; flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                        Explain folder structure
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" style="color: #a78bfa; text-decoration: none; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.5rem;" onclick="setPrompt(this); return false;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top: 3px; flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                        What technologies are used?
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
-                <div class="chat-input-container">
-                    <input type="text" id="chatInput" class="form-control chat-input" placeholder="Ask a question about the repository...">
-                    <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-                </div>
+
             </div>
         </main>
     </div>
 
     <script src="../js/analysis.js"></script>
-    <script src="../js/chat.js"></script>
     <script>
-        // Dummy chat logic
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const history = document.getElementById('chatHistory');
-            const text = input.value.trim();
-            
-            if(text) {
-                // Add user message
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = `<p>${text}</p>`;
-                history.appendChild(userMsg);
-                input.value = '';
-                
-                // Scroll to bottom
-                history.scrollTop = history.scrollHeight;
+        const input = document.getElementById('chatInput');
+        const history = document.getElementById('chatHistory');
+        const emptyState = document.getElementById('emptyState');
 
-                // Simulate AI reply
-                setTimeout(() => {
-                    const aiMsg = document.createElement('div');
-                    aiMsg.className = 'message ai';
-                    aiMsg.innerHTML = `<p>I am a placeholder AI. Here is a simulated response based on your question: "${text}". Real logic will connect to the Gemini API.</p>`;
-                    history.appendChild(aiMsg);
-                    history.scrollTop = history.scrollHeight;
-                }, 1000);
-            }
+        function setPrompt(element) {
+            input.value = element.innerText;
+            input.focus();
         }
-        
-        document.getElementById('chatInput').addEventListener('keypress', function (e) {
+
+        function setPromptAndSend(text) {
+            input.value = text;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Hide empty state on first message
+            if (emptyState.style.display !== 'none') {
+                emptyState.style.opacity = '0';
+                setTimeout(() => {
+                    emptyState.style.display = 'none';
+                    history.style.display = 'flex';
+                }, 300);
+            }
+
+            // Append User Message
+            const userHtml = `
+                <div class="message-row user">
+                    <div class="message-bubble">
+                        ${text}
+                    </div>
+                </div>
+            `;
+            history.insertAdjacentHTML('beforeend', userHtml);
+            input.value = '';
+            
+            // Scroll to bottom
+            setTimeout(() => { history.scrollTop = history.scrollHeight; }, 50);
+
+            // Simulate typing / response
+            setTimeout(() => {
+                const aiHtml = `
+                    <div class="message-row ai">
+                        <div class="message-wrapper">
+                            <div class="ai-avatar">🤖</div>
+                            <div class="message-bubble">
+                                I am analyzing your request regarding "<strong>${text}</strong>". In a live environment, this would stream the answer generated by RepoMind using deep repository context.
+                            </div>
+                        </div>
+                    </div>
+                `;
+                history.insertAdjacentHTML('beforeend', aiHtml);
+                history.scrollTop = history.scrollHeight;
+            }, 1000);
+        }
+
+        input.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
