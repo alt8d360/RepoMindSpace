@@ -76,8 +76,8 @@ def google_auth():
     client_id = current_app.config['GOOGLE_CLIENT_ID']
 
     try:
-        # Verify the Google token
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), client_id)
+        # Verify the Google token (added clock_skew_in_seconds to fix intermittent sync issues)
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), client_id, clock_skew_in_seconds=10)
 
         # Token is valid, extract user info
         email = idinfo['email']
