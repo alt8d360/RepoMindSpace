@@ -46,18 +46,93 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadAnalysisData() {
         console.log('Fetching analysis data for the current workspace...');
         
-        const workspaceName = localStorage.getItem('lastWorkspaceName') || 'siya';
+        const workspaceId = localStorage.getItem('currentWorkspaceId');
+        const token = localStorage.getItem('token');
+        const workspaceNameFallback = localStorage.getItem('lastWorkspaceName') || 'Workspace';
 
-        // Update Repo Name Badges/Headers
+        // Set fallback immediately
         const metaRepoName = document.getElementById('metaRepoName');
-        if (metaRepoName) metaRepoName.innerText = workspaceName;
+        if (metaRepoName) metaRepoName.innerText = workspaceNameFallback;
+        const workspaceNameHeader = document.getElementById('workspaceNameHeader');
+        if (workspaceNameHeader) workspaceNameHeader.innerText = workspaceNameFallback;
 
-        // Trigger the progress animation
-        animateProgress();
+        if (!workspaceId || !token) {
+            console.warn("No workspace ID or token found in localStorage.");
+            return;
+        }
+
+        fetch(`http://localhost:5000/api/workspace/${workspaceId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                console.error("Error fetching workspace:", data.error);
+                return;
+            }
+
+            // Update Repo Name Badges/Headers
+            if (metaRepoName) metaRepoName.innerText = data.name;
+            if (workspaceNameHeader) workspaceNameHeader.innerText = data.name;
+
+            // Update Total Files
+            const metricTotalFiles = document.getElementById('metricTotalFiles');
+            if (metricTotalFiles) {
+                metricTotalFiles.innerText = data.total_files;
+            }
+
+            // Update Summary
+            const summaryText = document.getElementById('summaryText');
+            if (summaryText) {
+                summaryText.innerText = `This repository (${data.name}) contains ${data.total_files} files and is primarily built using ${data.technologies.join(', ')}.`;
+            }
+
+            // Update Technology Stack container (assuming it's the element after the summary)
+            const techStackHeaders = Array.from(document.querySelectorAll('h2')).filter(h => h.innerText.includes('Technology Stack'));
+            if (techStackHeaders.length > 0) {
+                const stackContainer = techStackHeaders[0].parentElement;
+                
+                // Clear existing pills (if any)
+                const existingPills = stackContainer.querySelectorAll('.tech-pill-container');
+                existingPills.forEach(p => p.remove());
+
+                // Create a container for the pills
+                const pillContainer = document.createElement('div');
+                pillContainer.className = 'tech-pill-container';
+                pillContainer.style.display = 'flex';
+                pillContainer.style.gap = '10px';
+                pillContainer.style.flexWrap = 'wrap';
+
+                data.technologies.forEach(tech => {
+                    const span = document.createElement('span');
+                    span.className = 'tech-pill';
+                    span.innerText = tech;
+                    span.style.padding = '8px 16px';
+                    span.style.background = 'var(--alpha-10)';
+                    span.style.border = '1px solid var(--alpha-20)';
+                    span.style.borderRadius = '20px';
+                    span.style.color = 'var(--text-main)';
+                    span.style.fontSize = '0.9rem';
+                    pillContainer.appendChild(span);
+                });
+
+                stackContainer.appendChild(pillContainer);
+            }
+
+            // Trigger the progress animation
+            animateProgress();
+        })
+        .catch(err => {
+            console.error("Failed to fetch workspace details:", err);
+            animateProgress(); // fallback
+        });
     }
 
     // Only run if we are on the workspace detail page
-    if (document.getElementById('metaRepoName') || document.getElementById('progressCircle')) {
+    if (document.getElementById('metaRepoName') || document.getElementById('progressCircle') || document.getElementById('summaryText')) {
         loadAnalysisData();
     }
 });

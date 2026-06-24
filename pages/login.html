@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,22 +16,23 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ credential: response.credential })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.token) {
-                    localStorage.setItem('token', data.token);
-                    window.location.href = 'dashboard.html';
-                } else {
-                    alert(data.error || 'Google login failed');
-                }
-            })
-            .catch(err => {
-                console.error('Error during Google Auth:', err);
-                alert('Failed to connect to backend server.');
-            });
+                .then(res => res.json())
+                .then(data => {
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        alert(data.error || 'Google login failed');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error during Google Auth:', err);
+                    alert('Failed to connect to backend server.');
+                });
         }
     </script>
 </head>
+
 <body style="padding: 0; background-color: #1e1b2e;">
     <div class="auth-split">
         <div class="auth-split-left">
@@ -53,17 +55,20 @@
         <div class="auth-split-right">
             <div class="auth-form-wrapper">
                 <h2>Welcome Back</h2>
-                <p class="auth-subtitle">Don't have an account? <a href="register.html" style="color: #a78bfa; text-decoration: underline;">Sign up</a></p>
-                
+                <p class="auth-subtitle">Don't have an account? <a href="register.html"
+                        style="color: #a78bfa; text-decoration: underline;">Sign up</a></p>
+
                 <form id="loginForm">
                     <div class="form-group">
                         <input type="email" id="email" class="form-control" required placeholder="Email">
                     </div>
                     <div class="form-group" style="position: relative;">
-                        <input type="password" id="password" class="form-control" required placeholder="Enter your password">
+                        <input type="password" id="password" class="form-control" required
+                            placeholder="Enter your password">
                     </div>
                     <div class="form-group" style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); cursor: pointer;">
+                        <label
+                            style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); cursor: pointer;">
                             <input type="checkbox" style="accent-color: #6366f1;"> Remember me
                         </label>
                         <a href="forgot-password.html" style="color: #a78bfa;">Forgot password?</a>
@@ -74,20 +79,12 @@
                 <div class="divider">Or log in with</div>
                 <div class="social-login" style="justify-content: center;">
                     <div id="g_id_onload"
-                         data-client_id="1091939061408-1rpl2tqd6tn2iulba1oo8v1cfh94t4bs.apps.googleusercontent.com"
-                         data-context="signin"
-                         data-ux_mode="popup"
-                         data-callback="handleGoogleResponse"
-                         data-auto_prompt="false">
+                        data-client_id="1091939061408-1rpl2tqd6tn2iulba1oo8v1cfh94t4bs.apps.googleusercontent.com"
+                        data-context="signin" data-ux_mode="popup" data-callback="handleGoogleResponse"
+                        data-auto_prompt="false">
                     </div>
-                    <div class="g_id_signin"
-                         data-type="standard"
-                         data-shape="rectangular"
-                         data-theme="filled_black"
-                         data-text="signin_with"
-                         data-size="large"
-                         data-logo_alignment="left"
-                         style="width: 100%;">
+                    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black"
+                        data-text="signin_with" data-size="large" data-logo_alignment="left" style="width: 100%;">
                     </div>
                 </div>
             </div>
@@ -95,4 +92,5 @@
     </div>
     <script src="../js/auth.js"></script>
 </body>
+
 </html>
