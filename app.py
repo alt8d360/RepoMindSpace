@@ -24,7 +24,14 @@ def create_app():
 
     # Register Blueprints
     from routes.auth import auth_bp
+    from routes.workspace import workspace_bp
+    from routes.artifact import artifact_bp
+    from routes.chat import chat_bp
+    
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(workspace_bp, url_prefix='/api/workspace')
+    app.register_blueprint(artifact_bp, url_prefix='/api/artifacts')
+    app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
     @app.route('/')
     def index():

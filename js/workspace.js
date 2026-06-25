@@ -7,20 +7,53 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             const workspaceName = document.getElementById('workspaceName').value;
-            console.log(`Creating workspace: ${workspaceName}`);
+            const description = document.getElementById('workspaceDesc') ? document.getElementById('workspaceDesc').value : '';
+            const repoUrl = document.getElementById('repoUrl').value;
             
-            // Show loading state, call API, then redirect
+            console.log(`Creating workspace: ${workspaceName} from ${repoUrl}`);
+            
+            // Show loading state
             const btn = ingestForm.querySelector('button[type="submit"]');
-            btn.innerText = 'Analyzing Repository...';
+            btn.innerText = 'Fetching Repository (This may take a moment)...';
             btn.disabled = true;
 
-            // Mark that user has a workspace for the dashboard empty state
-            localStorage.setItem('hasWorkspace', 'true');
-            localStorage.setItem('lastWorkspaceName', workspaceName);
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("You must be logged in to create a workspace.");
+                window.location.href = 'login.html';
+                return;
+            }
 
-            setTimeout(() => {
-                window.location.href = 'workspace-detail.html';
-            }, 1500); // Dummy delay
+            fetch('http://localhost:5000/api/workspace/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name: workspaceName, description, repoUrl })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    alert(`Error creating workspace: ${data.error}`);
+                    btn.innerText = 'Create & Analyze Repository';
+                    btn.disabled = false;
+                } else {
+                    // Mark that user has a workspace for the dashboard empty state
+                    localStorage.setItem('hasWorkspace', 'true');
+                    localStorage.setItem('lastWorkspaceName', workspaceName);
+                    localStorage.setItem('currentWorkspaceId', data.workspace.id);
+                    
+                    // Redirect to workspace details
+                    window.location.href = 'workspace-detail.html';
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Failed to connect to the server.");
+                btn.innerText = 'Create & Analyze Repository';
+                btn.disabled = false;
+            });
         });
     }
 
@@ -33,11 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const workspaceName = localStorage.getItem('lastWorkspaceName');
 
-            // Update Metrics (assuming they are the first two .metric-value elements)
-            const metrics = document.querySelectorAll('.metric-value');
-            if (metrics.length >= 2) {
-                metrics[0].innerText = '1';
-                metrics[1].innerText = '1';
+            // Update Metrics
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch('http://localhost:5000/api/workspace/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                .then(res => res.json())
+                .then(stats => {
+                    if (!stats.error) {
+                        const metrics = document.querySelectorAll('.metric-value');
+                        if (metrics.length >= 4) {
+                            metrics[0].innerText = stats.total_workspaces;
+                            metrics[1].innerText = stats.repos_processed;
+                            metrics[2].innerText = stats.generated_artifacts;
+                            metrics[3].innerText = stats.total_chats;
+                        }
+                    }
+                })
+                .catch(err => console.error("Error fetching stats:", err));
             }
 
             // Update Recent Activity
@@ -93,10 +140,27 @@ document.addEventListener('DOMContentLoaded', () => {
             emptyState.style.display = 'none';
             populatedState.style.display = 'block';
 
-            document.getElementById('statTotalWorkspaces').innerText = '1';
-            document.getElementById('statRepositories').innerText = '1';
-            document.getElementById('statArtifacts').innerText = '0';
-            document.getElementById('statChats').innerText = '0';
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch('http://localhost:5000/api/workspace/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                .then(res => res.json())
+                .then(stats => {
+                    if (!stats.error) {
+                        document.getElementById('statTotalWorkspaces').innerText = stats.total_workspaces;
+                        document.getElementById('statRepositories').innerText = stats.repos_processed;
+                        document.getElementById('statArtifacts').innerText = stats.generated_artifacts;
+                        document.getElementById('statChats').innerText = stats.total_chats;
+                    }
+                })
+                .catch(err => console.error("Error fetching stats:", err));
+            } else {
+                document.getElementById('statTotalWorkspaces').innerText = '1';
+                document.getElementById('statRepositories').innerText = '1';
+                document.getElementById('statArtifacts').innerText = '0';
+                document.getElementById('statChats').innerText = '0';
+            }
 
             const workspacesList = document.getElementById('workspacesList');
             workspacesList.innerHTML = `
